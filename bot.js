@@ -4,42 +4,46 @@ const express = require('express')
 const app = express()
 const PORT = process.env.PORT || 3000
 
-app.get('/', (req, res) => res.send('AFK Bot is alive'))
-app.listen(PORT, () => console.log('Web server online'))
+app.get('/', (req, res) => {
+  res.send('AFK Bot is running')
+})
+
+app.listen(PORT, () => {
+  console.log('Web server online on port', PORT)
+})
 
 function createBot() {
-  console.log('Trying to connect to server...')
+  console.log('Trying to connect...')
 
   const bot = mineflayer.createBot({
     host: 'pgnr.aternos.me',
     port: 50932,
     username: 'AFKBot' + Math.floor(Math.random() * 999),
-    version: false,               // auto-detect (better than forcing 1.21.11)
-    auth: 'offline',
-    hideErrors: false
+    version: false,          // auto detect
+    auth: 'offline'
   })
 
   bot.on('login', () => {
-    console.log('Successfully logged in!')
+    console.log('Logged in successfully!')
   })
 
   bot.once('spawn', () => {
-    console.log('Bot is now inside the game!')
+    console.log('Bot is inside the game!')
     bot.chat('AFK bot online')
     startMoving(bot)
   })
 
-  bot.on('error', (err) => {
+  bot.on('error', err => {
     console.log('Error:', err.message)
   })
 
-  bot.on('kicked', (reason) => {
+  bot.on('kicked', reason => {
     console.log('Kicked:', reason)
     setTimeout(createBot, 12000)
   })
 
-  bot.on('end', (reason) => {
-    console.log('Disconnected:', reason)
+  bot.on('end', () => {
+    console.log('Disconnected. Reconnecting...')
     setTimeout(createBot, 12000)
   })
 }
