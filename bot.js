@@ -17,7 +17,7 @@ function createBot() {
     host: 'pgnr.aternos.me',
     port: 50932,
     username: 'AFKBot',
-    version: '1.21.1',
+    version: '1.21.11',
     auth: 'offline'
   })
 
